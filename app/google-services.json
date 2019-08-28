@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "920722451487",
+    "firebase_url": "https://bus-line-app.firebaseio.com",
+    "project_id": "bus-line-app",
+    "storage_bucket": "bus-line-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920722451487:android:805b83e19d38194c",
+        "android_client_info": {
+          "package_name": "br.com.fiap.buslineapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "920722451487-vma16uo62m456h8igsa4ju6ri837pc1n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.fiap.buslineapp",
+            "certificate_hash": "64d49ad77e3c1bee2cd3867cc5ee806ea41ee863"
+          }
+        },
+        {
+          "client_id": "920722451487-92kjspbtkj23bj8aumev24jbhuccd3io.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKvksEBdolnXghUNrnYAGHDCSs9vyijlU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "920722451487-92kjspbtkj23bj8aumev24jbhuccd3io.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
