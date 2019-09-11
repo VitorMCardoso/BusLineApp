@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import br.com.fiap.buslineapp.R
 import br.com.fiap.buslineapp.ui.form.FormActivity
+import br.com.fiap.buslineapp.ui.main.MainActivity
 import br.com.fiap.buslineapp.ui.signup.SignUpActivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
@@ -50,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun goToHome() {
-        var intent = Intent(this, FormActivity::class.java)
+        var intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
         finish()

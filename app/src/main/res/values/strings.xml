@@ -8,4 +8,5 @@
     <string name="label_name">Nome</string>
     <string name="label_phone">Telefone</string>
     <string name="button_new_account">Criar Usuario</string>
+    <string name="action_settings">Settings</string>
 </resources>
