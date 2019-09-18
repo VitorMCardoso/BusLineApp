@@ -9,4 +9,11 @@
     <string name="label_phone">Telefone</string>
     <string name="button_new_account">Criar Usuario</string>
     <string name="action_settings">Settings</string>
+    <string name="new_line_bus">Nova Linha de Onibus</string>
+    <string name="label_number_bus">Numero da Linha</string>
+    <string name="button_new_busline">Cadastrar Nova Linha</string>
+    <string name="new_line">Percurso</string>
+    <string name="label_street">Rua</string>
+    <string name="button_new_text">+</string>
+    <string name="button_delete_text">-</string>
 </resources>

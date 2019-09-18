@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,18 +15,13 @@ import br.com.fiap.buslineapp.ui.model.BusLine
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.recycler_view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import webservice.controller.RetrofitInitializer
 
 
 class MainActivity : AppCompatActivity() {
-
-    private var splashTimer: CountDownTimer? = null
-    private val TEMPO_AGUARDO_SPLASHSCREEN = 5L
-
-    val busLineList: MutableList<BusLine> = mutableListOf(
-        BusLine("123", 1, mutableListOf<String>("Rua A", "Rua B", "Rua C")),
-        BusLine("1234", 2, mutableListOf<String>("Rua A", "Rua B", "Rua C")),
-        BusLine("1235", 3, mutableListOf<String>("Rua A", "Rua B", "Rua C"))
-    )
 
     lateinit var busLineAdapter: BusLineAdapter
 
@@ -38,10 +34,38 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
 
+        val call = RetrofitInitializer().busLineService().list()
+        call.enqueue(object : Callback<MutableList<BusLine>?> {
+            override fun onResponse(
+                call: Call<MutableList<BusLine>?>?,
+                response: Response<MutableList<BusLine>?>?
+            ) {
+                response?.body()?.let {
+                    //val buslines: MutableList<BusLine> = it
+                    print("AQUI>>>>$it")
+                    val buss: MutableList<BusLine> = it
+                    configureList(buss)
+                    //busLineList.addAll(it)
+                }
+            }
+
+            override fun onFailure(
+                call: Call<MutableList<BusLine>?>?,
+                t: Throwable?
+            ) {
+                Log.e("onFailure error", t?.message)
+            }
+        })
+        print("AQIIII" + call)
+
+    }
+
+    private fun configureList(busLineList: MutableList<BusLine>) {
         busLineAdapter = BusLineAdapter(this, busLineList)
         recyclerViewBusLine.adapter = busLineAdapter
         recyclerViewBusLine.layoutManager = LinearLayoutManager(this)
         recyclerViewBusLine.smoothScrollToPosition(busLineList.size)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
