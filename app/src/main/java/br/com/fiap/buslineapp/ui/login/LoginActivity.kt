@@ -51,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun goToHome() {
-        var intent = Intent(this, MainActivity::class.java)
+        var intent = Intent(this@LoginActivity, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
         finish()

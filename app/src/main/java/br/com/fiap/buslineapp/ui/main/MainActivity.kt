@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fiap.buslineapp.R
 import br.com.fiap.buslineapp.ui.adapter.BusLineAdapter
+import br.com.fiap.buslineapp.ui.form.FormActivity
 import br.com.fiap.buslineapp.ui.model.BusLine
+import br.com.fiap.buslineapp.ui.signup.SignUpActivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.recycler_view.*
@@ -29,10 +31,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        fab.setOnClickListener {
+        /*fab.setOnClickListener {
             Snackbar.make(it, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
-        }
+        }*/
 
         val call = RetrofitInitializer().busLineService().list()
         call.enqueue(object : Callback<MutableList<BusLine>?> {
@@ -41,11 +43,8 @@ class MainActivity : AppCompatActivity() {
                 response: Response<MutableList<BusLine>?>?
             ) {
                 response?.body()?.let {
-                    //val buslines: MutableList<BusLine> = it
-                    print("AQUI>>>>$it")
                     val buss: MutableList<BusLine> = it
                     configureList(buss)
-                    //busLineList.addAll(it)
                 }
             }
 
@@ -56,7 +55,13 @@ class MainActivity : AppCompatActivity() {
                 Log.e("onFailure error", t?.message)
             }
         })
-        print("AQIIII" + call)
+
+        fab.setOnClickListener {
+            val nextScreen = Intent(this@MainActivity, FormActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(nextScreen)
+            finish()
+        }
 
     }
 

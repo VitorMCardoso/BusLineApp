@@ -7,7 +7,8 @@ import webservice.service.BusLineService
 class RetrofitInitializer {
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("http://172.20.60.59:8080/api/")
+        //.baseUrl("https://api-busline.herokuapp.com/api/")
+        .baseUrl("http://192.168.15.21:8080/api/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
