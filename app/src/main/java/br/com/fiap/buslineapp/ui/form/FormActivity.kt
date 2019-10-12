@@ -1,40 +1,76 @@
 package br.com.fiap.buslineapp.ui.form
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.Toast
 import br.com.fiap.buslineapp.R
 import br.com.fiap.buslineapp.ui.main.MainActivity
 import br.com.fiap.buslineapp.ui.model.BusLine
-import com.google.gson.JsonArray
-import com.google.gson.JsonElement
 import kotlinx.android.synthetic.main.activity_form.*
-import kotlinx.android.synthetic.main.field.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import webservice.controller.RetrofitInitializer
-import com.google.gson.JsonObject
-import org.json.JSONArray
-import org.json.JSONObject
-import java.lang.reflect.GenericArrayType
-import java.util.*
-import kotlin.collections.ArrayList
+import java.lang.StringBuilder
+import java.lang.System.out
 
 class FormActivity : AppCompatActivity() {
+
+    private var isUpdate: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
 
+        val bundle: Bundle? = intent.extras
+        if (bundle != null) {
+            isUpdate = bundle.getBoolean("isUpdate")
+
+            if (isUpdate) {
+                fillFields(bundle)
+            }
+
+        }
+
         btCreate.setOnClickListener {
 
-            val busLine = BusLine(
+            if (isUpdate) {
+                val call = RetrofitInitializer().busLineService()
+                    .update(fillObject(bundle?.getString("busId")!!, true))
+                call.enqueue(object : Callback<BusLine> {
+
+                    override fun onFailure(call: Call<BusLine>, t: Throwable) {
+                        Log.e("onFailure error", t?.message)
+                    }
+
+                    override fun onResponse(call: Call<BusLine>, response: Response<BusLine>) {
+                        val nextScreen = Intent(this@FormActivity, MainActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        startActivity(nextScreen)
+                        finish()
+                    }
+                })
+
+
+            } else {
+                val call = RetrofitInitializer().busLineService().add(fillObject("", false))
+                call.enqueue(object : Callback<BusLine> {
+
+                    override fun onFailure(call: Call<BusLine>, t: Throwable) {
+                        Log.e("onFailure error", t?.message)
+                    }
+
+                    override fun onResponse(call: Call<BusLine>, response: Response<BusLine>) {
+                        val nextScreen = Intent(this@FormActivity, MainActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        startActivity(nextScreen)
+                        finish()
+                    }
+                })
+            }
+
+            /*val busLine = BusLine(
                 null,
                 inputNumberBus.text.toString().toBigDecimal(),
                 mutableListOf(
@@ -43,28 +79,62 @@ class FormActivity : AppCompatActivity() {
                     inputStreet3.text.toString(),
                     inputStreet4.text.toString()
                 )
-            )
+            )*/
 
-            val call = RetrofitInitializer().busLineService().add(busLine)
-            call.enqueue(object : Callback<BusLine> {
 
-                override fun onFailure(call: Call<BusLine>, t: Throwable) {
-                    Log.e("onFailure error", t?.message)
-                }
-
-                override fun onResponse(call: Call<BusLine>, response: Response<BusLine>) {
-                    val nextScreen = Intent(this@FormActivity, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    startActivity(nextScreen)
-                    finish()
-                }
-            }
-
-            )
         }
     }
 
-    /*fun onAddField(v: View) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        out.println(data?.getStringExtra("busStreets"))
+    }
+
+    fun fillFields(bundle: Bundle) {
+        val listStreets = bundle.getString("busStreets")
+        val busNumber = bundle.getString("busNumber")
+        val arrayList: List<String> = listStreets!!.split(",").map {
+            it.trim()
+        }
+
+        inputStreet.setText(arrayList.get(0).replace("[", ""))
+        inputStreet2.setText(arrayList.get(1))
+        inputStreet3.setText(arrayList.get(2))
+        inputStreet4.setText(arrayList.get(3).replace("]", ""))
+        inputNumberBus.setText(busNumber)
+
+
+    }
+
+    fun fillObject(busId: String, isUpdate: Boolean): BusLine {
+
+        val id: String?
+
+        if (isUpdate) {
+            id = busId
+        } else {
+            id = null
+        }
+
+        val busLine = BusLine(
+            id,
+            inputNumberBus.text.toString().toBigDecimal(),
+            mutableListOf(
+                inputStreet.text.toString(),
+                inputStreet2.text.toString(),
+                inputStreet3.text.toString(),
+                inputStreet4.text.toString()
+            )
+        )
+
+        return busLine
+    }
+
+}
+
+
+//////////////////////////
+/*fun onAddField(v: View) {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val rowView = inflater.inflate(R.layout.field, null)
         // Add the new row before the add field button.
@@ -89,29 +159,4 @@ class FormActivity : AppCompatActivity() {
         }
 
     }*/
-}
-
-
-/*call.enqueue(object : Callback<MutableList<BusLine>?> {
-                override fun onResponse(
-                    call: Call<MutableList<BusLine>?>?,
-                    response: Response<MutableList<BusLine>?>?
-                ) {
-                    response?.body()?.let {
-                        val buss: MutableList<BusLine> = it
-                        configureList(buss)
-                    }
-                }
-
-                override fun onFailure(
-                    call: Call<MutableList<BusLine>?>?,
-                    t: Throwable?
-                ) {
-                    Log.e("onFailure error", t?.message)
-                }
-            })*/
-
-
-/*for (i in 0 until parent_linear_layout.getChildCount())
-    if (parent_linear_layout.getChildAt(i) is TextInputEditText)
-        //myEditTextList.add(parent_linear_layout.getChildAt(i) as TextInputEditText)*/
+/////////////
