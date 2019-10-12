@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import br.com.fiap.buslineapp.R
 import br.com.fiap.buslineapp.ui.main.MainActivity
+import br.com.fiap.buslineapp.ui.model.BusLine
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import kotlinx.android.synthetic.main.activity_form.*
@@ -19,12 +20,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import webservice.controller.RetrofitInitializer
 import com.google.gson.JsonObject
+import org.json.JSONArray
+import org.json.JSONObject
+import java.lang.reflect.GenericArrayType
+import java.util.*
+import kotlin.collections.ArrayList
 
 class FormActivity : AppCompatActivity() {
-
-    //private val myBusStreetsList: MutableList<String>? = ArrayList()
-    private var count: Number = 0
-    private val jsonArray: JsonArray? = JsonArray()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,19 +34,25 @@ class FormActivity : AppCompatActivity() {
 
         btCreate.setOnClickListener {
 
-            val jsonBusObject = JsonObject()
+            val busLine = BusLine(
+                null,
+                inputNumberBus.text.toString().toBigDecimal(),
+                mutableListOf(
+                    inputStreet.text.toString(),
+                    inputStreet2.text.toString(),
+                    inputStreet3.text.toString(),
+                    inputStreet4.text.toString()
+                )
+            )
 
-            jsonBusObject.addProperty("busLine", inputNumberBus.text.toString().toBigDecimal())
-            jsonBusObject.add("line", jsonArray)
+            val call = RetrofitInitializer().busLineService().add(busLine)
+            call.enqueue(object : Callback<BusLine> {
 
-            val call = RetrofitInitializer().busLineService().add(jsonBusObject)
-            call.enqueue(object : Callback<String> {
-
-                override fun onFailure(call: Call<String>, t: Throwable) {
+                override fun onFailure(call: Call<BusLine>, t: Throwable) {
                     Log.e("onFailure error", t?.message)
                 }
 
-                override fun onResponse(call: Call<String>, response: Response<String>) {
+                override fun onResponse(call: Call<BusLine>, response: Response<BusLine>) {
                     val nextScreen = Intent(this@FormActivity, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     startActivity(nextScreen)
@@ -56,7 +64,7 @@ class FormActivity : AppCompatActivity() {
         }
     }
 
-    fun onAddField(v: View) {
+    /*fun onAddField(v: View) {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val rowView = inflater.inflate(R.layout.field, null)
         // Add the new row before the add field button.
@@ -66,10 +74,10 @@ class FormActivity : AppCompatActivity() {
         if (parent_linear_layout.childCount >= 4 && count == 0) {
             jsonArray?.add(inputStreetCopy.text.toString())
             count = +1
-        }/*else if(parent_linear_layout.childCount >= 4 && count > 0){
+        }*//*else if(parent_linear_layout.childCount >= 4 && count > 0){
             count++
             print(rowView)
-        }*/
+        }*//*
         parent_linear_layout?.addView(rowView, parent_linear_layout.childCount - 1)
     }
 
@@ -80,7 +88,7 @@ class FormActivity : AppCompatActivity() {
             Toast.makeText(this, "Não é possivel excluir mais linhas", Toast.LENGTH_SHORT).show()
         }
 
-    }
+    }*/
 }
 
 

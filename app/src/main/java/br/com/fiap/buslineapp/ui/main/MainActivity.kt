@@ -31,11 +31,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        /*fab.setOnClickListener {
-            Snackbar.make(it, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }*/
-
         val call = RetrofitInitializer().busLineService().list()
         call.enqueue(object : Callback<MutableList<BusLine>?> {
             override fun onResponse(
