@@ -9,11 +9,13 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.fiap.buslineapp.R
+import br.com.fiap.buslineapp.ui.about.AboutActivity
 import br.com.fiap.buslineapp.ui.adapter.BusLineAdapter
 import br.com.fiap.buslineapp.ui.form.FormActivity
 import br.com.fiap.buslineapp.ui.model.BusLine
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.recycler_view.*
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -76,7 +78,13 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_about -> {
+                val nextScreen = Intent(this@MainActivity, AboutActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(nextScreen)
+                finish()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

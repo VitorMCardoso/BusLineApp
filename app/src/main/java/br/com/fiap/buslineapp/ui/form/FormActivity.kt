@@ -14,6 +14,7 @@ import retrofit2.Response
 import webservice.controller.RetrofitInitializer
 import java.lang.StringBuilder
 import java.lang.System.out
+import kotlin.math.absoluteValue
 
 class FormActivity : AppCompatActivity() {
 
@@ -29,6 +30,7 @@ class FormActivity : AppCompatActivity() {
 
             if (isUpdate) {
                 fillFields(bundle)
+                btCreate.text = resources.getString(R.string.button_update_busline)
             }
 
         }
@@ -51,10 +53,9 @@ class FormActivity : AppCompatActivity() {
                         finish()
                     }
                 })
-
-
             } else {
-                val call = RetrofitInitializer().busLineService().add(fillObject("", false))
+                val call = RetrofitInitializer().busLineService()
+                    .add(fillObject("", false))
                 call.enqueue(object : Callback<BusLine> {
 
                     override fun onFailure(call: Call<BusLine>, t: Throwable) {
@@ -69,19 +70,6 @@ class FormActivity : AppCompatActivity() {
                     }
                 })
             }
-
-            /*val busLine = BusLine(
-                null,
-                inputNumberBus.text.toString().toBigDecimal(),
-                mutableListOf(
-                    inputStreet.text.toString(),
-                    inputStreet2.text.toString(),
-                    inputStreet3.text.toString(),
-                    inputStreet4.text.toString()
-                )
-            )*/
-
-
         }
     }
 

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import br.com.fiap.buslineapp.R
 import br.com.fiap.buslineapp.ui.form.FormActivity
@@ -63,5 +64,9 @@ class LoginActivity : AppCompatActivity() {
             inputLoginEmail.setText(data?.getStringExtra("email"))
             goToHome()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return super.onOptionsItemSelected(item)
     }
 }
